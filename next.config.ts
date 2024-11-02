@@ -28,9 +28,11 @@ const nextConfig = {
   distDir: "build",
 
   // 启用 Webpack 5 并自定义配置
-  webpack: (config, { isServer }) => {
+  webpack: (config: import('webpack').Configuration, { isServer }: { isServer: boolean }) => {
     // 在服务器端禁用某些模块
     if (!isServer) {
+      config.resolve = config.resolve || {};
+      config.resolve.fallback = config.resolve.fallback || {};
       config.resolve.fallback.fs = false;
     }
     return config;
