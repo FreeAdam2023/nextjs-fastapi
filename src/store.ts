@@ -12,10 +12,10 @@ type CreateTodo = {
 
 type TodoStore = {
   todos: Todo[];
-  fetchTodos: () => void;
-  addTodo: (todo: CreateTodo) => void;
-  updateTodo: (updatedTodo: Todo) => void;
-  deleteTodo: (id: number) => void;
+  fetchTodos: () => Promise<void>;
+  addTodo: (todo: CreateTodo) => Promise<void>;
+  updateTodo: (updatedTodo: Todo) => Promise<void>;
+  deleteTodo: (id: number) => Promise<void>;
 };
 
 const URL = process.env.NEXT_PUBLIC_VERCEL_URL
@@ -27,7 +27,10 @@ export const useStore = create<TodoStore>((set) => ({
   fetchTodos: async () => {
     try {
       const response = await fetch(`${URL}/todos`);
-      const todos = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to fetch todos");
+      }
+      const todos: Todo[] = await response.json();
       set({ todos });
     } catch (error) {
       console.error("Error fetching todos:", error);
@@ -42,7 +45,10 @@ export const useStore = create<TodoStore>((set) => ({
         },
         body: JSON.stringify(todo),
       });
-      const createdTodo = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to create todo");
+      }
+      const createdTodo: Todo = await response.json();
       set((state) => ({ todos: [...state.todos, createdTodo] }));
     } catch (error) {
       console.error("Error creating todo:", error);
@@ -57,7 +63,10 @@ export const useStore = create<TodoStore>((set) => ({
         },
         body: JSON.stringify(updatedTodo),
       });
-      const updatedItem = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to update todo");
+      }
+      const updatedItem: Todo = await response.json();
       set((state) => ({
         todos: state.todos.map((todo) =>
           todo.id === updatedItem.id ? updatedItem : todo
@@ -69,9 +78,12 @@ export const useStore = create<TodoStore>((set) => ({
   },
   deleteTodo: async (id) => {
     try {
-      await fetch(`${URL}/todos/${id}`, {
+      const response = await fetch(`${URL}/todos/${id}`, {
         method: "DELETE",
       });
+      if (!response.ok) {
+        throw new Error("Failed to delete todo");
+      }
       set((state) => ({
         todos: state.todos.filter((todo) => todo.id !== id),
       }));
