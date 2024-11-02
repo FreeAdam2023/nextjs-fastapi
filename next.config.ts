@@ -10,5 +10,7 @@ const nextConfig = {
   },
   // 其他配置项
 };
-
+module.exports = {
+  output: "standalone",
+};
 module.exports = nextConfig;
