@@ -1,4 +1,5 @@
 FROM node:20-alpine AS base
+ARG SETUP_ENVINROMENT=production
 
 
 
@@ -26,6 +27,7 @@ RUN corepack enable
 RUN corepack prepare pnpm@latest --activate
 
 WORKDIR /app
+COPY .env.$SETUP_ENVINROMENT .env
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
