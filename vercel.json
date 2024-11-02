@@ -1,26 +1,10 @@
 {
   "builds": [
-    {
-      "src": "api/index.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
+    { "src": "api/index.py", "use": "@vercel/python" },
+    { "src": "package.json", "use": "@vercel/next" }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "api/index.py"
-    },
-    {
-      "src": "/_next/(.*)",
-      "dest": "/_next/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
+    { "src": "/api/(.*)", "dest": "api/index.py" },
+    { "src": "/(.*)", "dest": "/" }
   ]
 }

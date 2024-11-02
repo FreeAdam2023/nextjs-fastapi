@@ -14,23 +14,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class TodoCreate(BaseModel):
     title: str
+
 
 class TodoUpdate(BaseModel):
     title: Union[str, None] = None
     completed: Union[bool, None] = None
+
 
 class TodoItem(BaseModel):
     id: int
     title: str
     completed: bool
 
+
 todos: List[TodoItem] = []
+
 
 @app.get("/api/healthchecker")
 def healthchecker():
     return {"status": "success", "message": "Integrate FastAPI Framework with Next.js"}
+
 
 @app.post("/api/todos", response_model=TodoItem)
 def create_todo_item(todo: TodoCreate):
@@ -38,9 +44,11 @@ def create_todo_item(todo: TodoCreate):
     todos.append(new_todo)
     return new_todo
 
+
 @app.get("/api/todos", response_model=List[TodoItem])
 def get_all_todo_items():
     return todos
+
 
 @app.get("/api/todos/{todo_id}", response_model=TodoItem)
 def get_todo_item(todo_id: int):
@@ -48,6 +56,7 @@ def get_todo_item(todo_id: int):
         if todo.id == todo_id:
             return todo
     raise HTTPException(status_code=404, detail="Todo item not found")
+
 
 @app.patch("/api/todos/{todo_id}", response_model=TodoItem)
 def update_todo_item(todo_id: int, todo: TodoUpdate):
@@ -58,6 +67,7 @@ def update_todo_item(todo_id: int, todo: TodoUpdate):
             return todo_item
     raise HTTPException(status_code=404, detail="Todo item not found")
 
+
 @app.delete("/api/todos/{todo_id}")
 def delete_todo_item(todo_id: int):
     for i, todo_item in enumerate(todos):
@@ -65,3 +75,11 @@ def delete_todo_item(todo_id: int):
             del todos[i]
             return {"message": "Todo item deleted"}
     raise HTTPException(status_code=404, detail="Todo item not found")
+
+
+from fastapi.responses import JSONResponse
+
+@app.options("/api/{path:path}")
+async def preflight_handler(path: str):
+    return JSONResponse(content={}, status_code=200)
+
