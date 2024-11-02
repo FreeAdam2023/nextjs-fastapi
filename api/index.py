@@ -6,6 +6,9 @@ from pydantic import BaseModel
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
+origins = [
+    "https://nextjs-fastapi-two-delta.vercel.app"
+]
 
 @app.get("/api/healthchecker")
 def healthchecker():
