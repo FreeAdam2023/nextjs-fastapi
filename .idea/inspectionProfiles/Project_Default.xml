@@ -1,0 +1,29 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="13">
+            <item index="0" class="java.lang.String" itemvalue="Flask-Bcrypt" />
+            <item index="1" class="java.lang.String" itemvalue="Flask-SQLAlchemy" />
+            <item index="2" class="java.lang.String" itemvalue="mysql-connector-python" />
+            <item index="3" class="java.lang.String" itemvalue="Flask-Login" />
+            <item index="4" class="java.lang.String" itemvalue="Flask" />
+            <item index="5" class="java.lang.String" itemvalue="typing_extensions" />
+            <item index="6" class="java.lang.String" itemvalue="opt_einsum" />
+            <item index="7" class="java.lang.String" itemvalue="supermemo2-3.0.1" />
+            <item index="8" class="java.lang.String" itemvalue="pymongo" />
+            <item index="9" class="java.lang.String" itemvalue="redis-5.1.1" />
+            <item index="10" class="java.lang.String" itemvalue="openai-1.51.2" />
+            <item index="11" class="java.lang.String" itemvalue="requests" />
+            <item index="12" class="java.lang.String" itemvalue="redis" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="SqlDialectInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="SqlNoDataSourceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  </profile>
+</component>
