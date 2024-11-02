@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone", // 添加其他配置项
   async rewrites() {
     return [
       {
@@ -10,7 +11,5 @@ const nextConfig = {
   },
   // 其他配置项
 };
-module.exports = {
-  output: "standalone",
-};
+
 module.exports = nextConfig;

@@ -5,14 +5,13 @@ from pydantic import BaseModel
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
-origins = ["https://nextjs-fastapi-two-delta.vercel.app"]
-
+# 使用 "*" 允许所有来源
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PATCH", "DELETE"],
-    allow_headers=["Content-Type"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 class TodoCreate(BaseModel):
