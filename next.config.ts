@@ -25,7 +25,7 @@ const nextConfig = {
   },
 
   // 设置构建输出目录（可选）
-  distDir: "build",
+  distDir: ".next",
 
   // 启用 Webpack 5 并自定义配置
   webpack: (config: any, { isServer }: { isServer: boolean }) => {
