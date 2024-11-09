@@ -99,8 +99,8 @@ jobs:
           docker build -t my-nextjs-docker:latest .
       - name: Push Docker Image to Docker Hub
         run: |
-          docker tag my-nextjs-docker:latest my-nextjs-docker/my-nextjs-docker:latest
-          docker push my-nextjs-docker/my-nextjs-docker:latest
+          docker tag my-nextjs-docker:latest adamlyu/my-nextjs-docker:latest
+          docker push adamlyu/my-nextjs-docker:latest
 
   # Step 5: 部署到 Vercel
   deploy:
