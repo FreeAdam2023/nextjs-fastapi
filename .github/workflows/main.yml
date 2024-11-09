@@ -43,6 +43,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm
       - name: Run Frontend Unit Test A
         run: |
           cd src
@@ -56,6 +59,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm
       - name: Run Frontend Unit Test B
         run: |
           cd src
