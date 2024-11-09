@@ -59,12 +59,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build frontend Docker image
+      - name: Build Docker image
         run: |
-          docker build -t my-frontend-image:latest -f src/Dockerfile .  # 假设 Dockerfile 位于 src 中
+          docker build -t my-nextjs-docker:latest -f ./src/Dockerfile ./src  # 确保路径为 src 目录下的 Dockerfile
 
-      - name: Build backend Docker image
-        run: |
-          docker build -t my-backend-image:latest -f api/Dockerfile .  # 假设 Dockerfile 位于 api 中
+
 
 
