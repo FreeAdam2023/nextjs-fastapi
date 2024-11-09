@@ -2,6 +2,7 @@ from typing import List, Union
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from fastapi.responses import JSONResponse
 
 app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
@@ -35,7 +36,10 @@ todos: List[TodoItem] = []
 
 @app.get("/api/healthchecker")
 def healthchecker():
-    return {"status": "success", "message": "Integrate FastAPI Framework with Next.js"}
+    return {
+        "status": "success",
+        "message": "Integrate FastAPI Framework with Next.js"
+    }
 
 
 @app.post("/api/todos", response_model=TodoItem)
@@ -62,8 +66,12 @@ def get_todo_item(todo_id: int):
 def update_todo_item(todo_id: int, todo: TodoUpdate):
     for todo_item in todos:
         if todo_item.id == todo_id:
-            todo_item.title = todo.title if todo.title is not None else todo_item.title
-            todo_item.completed = todo.completed if todo.completed is not None else todo_item.completed
+            todo_item.title = (
+                todo.title if todo.title is not None else todo_item.title
+            )
+            todo_item.completed = (
+                todo.completed if todo.completed is not None else todo_item.completed
+            )
             return todo_item
     raise HTTPException(status_code=404, detail="Todo item not found")
 
@@ -77,9 +85,6 @@ def delete_todo_item(todo_id: int):
     raise HTTPException(status_code=404, detail="Todo item not found")
 
 
-from fastapi.responses import JSONResponse
-
 @app.options("/api/{path:path}")
 async def preflight_handler(path: str):
     return JSONResponse(content={}, status_code=200)
-
