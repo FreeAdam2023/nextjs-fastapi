@@ -92,7 +92,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
-          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_TOKEN" --password-stdin
+          echo "$DOCKERHUB_TOKEN" | docker login --username "$DOCKERHUB_TOKEN" --password-stdin
       - name: Build Docker Image
         run: |
           docker build -t my-nextjs-docker:latest .
