@@ -88,7 +88,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_TOKEN" --password-stdin
       - name: Build Docker Image
         run: |
           docker build -t my-nextjs-docker:latest .
