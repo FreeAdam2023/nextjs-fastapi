@@ -8,7 +8,8 @@
     "dev": "concurrently \"pnpm run next-dev\" \"pnpm run fastapi-dev\"",
     "build": "next build",
     "start": "next start",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint ."
   },
   "dependencies": {
     "concurrently": "^9.0.1",
