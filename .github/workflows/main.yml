@@ -94,22 +94,20 @@ jobs:
           pip install -r requirements.txt
           pytest
 
-  # Step 3: 部署到 Staging
-  deploy_staging:
-    name: Deploy Staging
+  # 部署到 Vercel
+  deploy:
+    name: Deploy to Vercel
     runs-on: ubuntu-latest
-    needs: [frontend_test_a, frontend_test_b, backend_test_a, backend_test_b]
+    needs: [ frontend_build, backend_build ]
     steps:
-      - name: Deploy to Staging
-        run: echo "Deploying to Staging at https://www.staging.interstellar.dev"
-        # 添加你的实际部署命令，例如使用 Terraform、kubectl、SSH 等
-
-  # Step 4: 部署到 Production
-  deploy_production:
-    name: Deploy Production
-    runs-on: ubuntu-latest
-    needs: deploy_staging
-    steps:
-      - name: Deploy to Production
-        run: echo "Deploying to Production"
-        # 添加你的实际生产环境部署命令
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20  # Vercel GitHub Action
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}  # 在 GitHub Secrets 中添加 Vercel Token
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}  # Vercel 组织 ID
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}  # Vercel 项目 ID
+          working-directory: ./src  # 如果有特定工作目录
+        env:
+          VERCEL_ENV: production  # 可选：设置部署环境（production 或 preview）
