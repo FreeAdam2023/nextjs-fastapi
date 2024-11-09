@@ -69,9 +69,10 @@ def update_todo_item(todo_id: int, todo: TodoUpdate):
             todo_item.title = (
                 todo.title if todo.title is not None else todo_item.title
             )
-            todo_item.completed = (
-                todo.completed if todo.completed is not None else todo_item.completed
-            )
+            if todo.completed is not None:
+                todo_item.completed = todo.completed
+            else:
+                todo_item.completed = todo_item.completed
             return todo_item
     raise HTTPException(status_code=404, detail="Todo item not found")
 
