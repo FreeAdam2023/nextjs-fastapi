@@ -7,98 +7,82 @@ on:
   pull_request:
 
 jobs:
-  # Step 1: 构建前端和后端
-  frontend_build:
-    name: Frontend Build
+  # Step 1: 代码检查
+  code_quality_check:
+    name: Code Quality Check
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run Linter (ESLint for JS/TS projects)
+        run: |
+          cd src
+          pnpm install
+          pnpm lint
+      - name: Run Code Formatter Check (Prettier or Black for Python)
+        run: |
+          cd src
+          pnpm format-check  # 假设您有配置格式检查命令
+
+  # Step 2: 构建和测试前端
+  frontend_test:
+    name: Frontend Build and Test
+    runs-on: ubuntu-latest
+    needs: code_quality_check
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install pnpm
         run: |
           npm install -g pnpm
-      - name: Build frontend
+      - name: Build and Test Frontend
         run: |
           cd src
           pnpm install
           pnpm build
-
-  backend_build:
-    name: Backend Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Build backend
-        run: |
-          cd api
-          pip install -r requirements.txt
-          # Build steps if required, e.g., docker build or other commands
-
-  # Step 2: 前端和后端单元测试（并行执行）
-  frontend_test_a:
-    name: Frontend Unit Test A
-    runs-on: ubuntu-latest
-    needs: frontend_build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install pnpm
-        run: |
-          npm install -g pnpm
-      - name: Run Frontend Unit Test A
-        run: |
-          cd src
-          pnpm install
           pnpm test
 
-  frontend_test_b:
-    name: Frontend Unit Test B
+  # Step 3: 构建和测试后端
+  backend_test:
+    name: Backend Build and Test
     runs-on: ubuntu-latest
-    needs: frontend_build
+    needs: code_quality_check
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install pnpm
-        run: |
-          npm install -g pnpm
-      - name: Run Frontend Unit Test B
-        run: |
-          cd src
-          pnpm install
-          pnpm test
-
-  backend_test_a:
-    name: Backend Unit Test A
-    runs-on: ubuntu-latest
-    needs: backend_build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run Backend Unit Test A
+      - name: Install dependencies
         run: |
           cd api
           pip install -r requirements.txt
+          pip install pytest
+      - name: Run Backend Tests
+        run: |
+          cd api
           pytest
 
-  backend_test_b:
-    name: Backend Unit Test B
+  # Step 4: 构建 Docker 镜像
+  docker_build:
+    name: Build Docker Image
     runs-on: ubuntu-latest
-    needs: backend_build
+    needs: [frontend_test, backend_test]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Run Backend Unit Test B
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Build Docker Image
         run: |
-          cd api
-          pip install -r requirements.txt
-          pytest
+          docker build -t my-nextjs-docker:latest .
+      - name: Push Docker Image to Docker Hub
+        run: |
+          docker tag my-nextjs-docker:latest my-nextjs-docker/my-nextjs-docker:latest
+          docker push my-nextjs-docker/my-nextjs-docker:latest
 
-  # 部署到 Vercel
+  # Step 5: 部署到 Vercel
   deploy:
     name: Deploy to Vercel
     runs-on: ubuntu-latest
-    needs: [ frontend_build, backend_build ]
+    needs: docker_build
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
