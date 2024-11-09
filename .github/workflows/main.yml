@@ -87,12 +87,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Login to Docker Hub
+      - name: Configure Docker for GitHub Actions
+        run: |
+          mkdir -p ~/.docker
+          echo '{"auths": {"https://index.docker.io/v1/": {"auth": "'$(echo -n "$DOCKER_USERNAME:$DOCKERHUB_TOKEN" | base64)'"}}}' > ~/.docker/config.json
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: |
-          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - name: Build Docker Image
         run: |
           docker build -t my-nextjs-docker:latest .
