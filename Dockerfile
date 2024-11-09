@@ -12,7 +12,7 @@ FROM base AS deps
 WORKDIR /app
 
 # Copy package.json 和 pnpm-lock.yaml 并安装依赖
-COPY src/package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prefer-frozen-lockfile
 
 # Builder stage

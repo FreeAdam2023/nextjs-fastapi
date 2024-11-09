@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "fastapi-dev": "pip3 install -r ../api/requirements.txt && python3 -m uvicorn api.index:app --reload",
-    "next-dev": "../node_modules/.bin/next dev",
-    "dev": "../node_modules/.bin/concurrently \\\"pnpm run next-dev\\\" \\\"pnpm run fastapi-dev\\\"",
-    "build": "../node_modules/.bin/next build",
-    "start": "../node_modules/.bin/next start",
-    "test": "../node_modules/.bin/jest",
-    "lint": "../node_modules/.bin/eslint ."
+    "fastapi-dev": "pip3 install -r api/requirements.txt && python3 -m uvicorn api.index:app --reload",
+    "next-dev": "node_modules/.bin/next dev",
+    "dev": "node_modules/.bin/concurrently \\\\\\\"pnpm run next-dev\\\\\\\" \\\\\\\"pnpm run fastapi-dev\\\\\\\"",
+    "build": "node_modules/.bin/next build",
+    "start": "node_modules/.bin/next start",
+    "test": "node_modules/.bin/jest",
+    "lint": "node_modules/.bin/eslint ."
   },
   "dependencies": {
     "concurrently": "^9.0.1",
