@@ -7,22 +7,41 @@ on:
   pull_request:
 
 jobs:
-  # Step 1: 代码检查
   code_quality_check:
-    name: Code Quality Check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run Linter (ESLint for JS/TS projects)
-        run: |
-          cd src
-          pnpm install
-          pnpm lint
-      - name: Run Code Formatter Check (Prettier or Black for Python)
-        run: |
-          cd src
-          pnpm format-check  # 假设您有配置格式检查命令
+      name: Code Quality Check
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        # 安装 pnpm 用于前端项目的依赖管理
+        - name: Install pnpm
+          run: |
+            npm install -g pnpm
+
+        # 前端代码质量检查
+        - name: Run Frontend Linter (ESLint)
+          run: |
+            cd src
+            pnpm install
+            pnpm lint  # 假设配置了 ESLint 作为代码检查工具
+
+        # 后端代码质量检查
+        - name: Install Python Dependencies
+          run: |
+            cd api
+            pip install -r requirements.txt
+            pip install flake8 black  # 安装 flake8 和 black
+
+        - name: Run Backend Linter (Flake8)
+          run: |
+            cd api
+            flake8 .  # 使用 Flake8 进行 Python 代码质量检查
+
+        - name: Run Backend Formatter Check (Black)
+          run: |
+            cd api
+            black --check .  # 使用 Black 进行代码格式检查
 
   # Step 2: 构建和测试前端
   frontend_test:
