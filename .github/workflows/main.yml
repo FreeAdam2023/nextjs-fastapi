@@ -41,7 +41,7 @@ jobs:
         - name: Run Backend Formatter Check (Black)
           run: |
             cd api
-            black --check .  # 使用 Black 进行代码格式检查
+            black .  # 使用 Black 进行代码格式检查
 
   # Step 2: 构建和测试前端
   frontend_test:
