@@ -96,11 +96,11 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/my-nextjs-docker:latest .
+          docker build -t ghcr.io/freeadam2023/my-nextjs-docker:latest .
 
       - name: Push Docker Image to GitHub Container Registry
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/my-nextjs-docker:latest
+          docker push ghcr.io/freeadam2023/my-nextjs-docker:latest
 
   # Step 5: 部署到 Vercel
   deploy:
