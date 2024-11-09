@@ -7,62 +7,100 @@ on:
   pull_request:
 
 jobs:
-  # Step 1: 代码检查
-  lint:
-    name: Lint Code
+  # Step 1: 构建前端和后端
+  frontend_build:
+    name: Frontend Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      # ESLint for Next.js
-      - name: Run ESLint
+      - name: Build frontend
         run: |
-          cd src  # 更新路径为 src
-          pnpm install  # 使用 pnpm
-          pnpm lint  # 确保在 package.json 中有 "lint" 脚本
+          cd src
+          pnpm install
+          pnpm build
 
-      # Flake8 for FastAPI
-      - name: Run Flake8
+  backend_build:
+    name: Backend Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build backend
         run: |
-          cd api  # 更新路径为 api
+          cd api
           pip install -r requirements.txt
-          flake8 .
+          # Build steps if required, e.g., docker build or other commands
 
-  # Step 2: 测试前端和后端
-  test:
-    name: Run Tests
+  # Step 2: 前端和后端单元测试（并行执行）
+  frontend_test_a:
+    name: Frontend Unit Test A
     runs-on: ubuntu-latest
+    needs: frontend_build
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      # 安装依赖并运行 Next.js 测试
-      - name: Install Next.js dependencies and run tests
+      - name: Run Frontend Unit Test A
         run: |
-          cd src  # 更新路径为 src
-          pnpm install  # 使用 pnpm
-          pnpm test  # 确保在 package.json 中有 "test" 脚本
+          cd src
+          pnpm install
+          pnpm test
 
-      # 安装依赖并运行 FastAPI 测试
-      - name: Install FastAPI dependencies and run tests
+  frontend_test_b:
+    name: Frontend Unit Test B
+    runs-on: ubuntu-latest
+    needs: frontend_build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run Frontend Unit Test B
         run: |
-          cd api  # 更新路径为 api
+          cd src
+          pnpm install
+          pnpm test
+
+  backend_test_a:
+    name: Backend Unit Test A
+    runs-on: ubuntu-latest
+    needs: backend_build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run Backend Unit Test A
+        run: |
+          cd api
           pip install -r requirements.txt
           pytest
 
-  # Step 3: 构建 Docker 镜像
-  build:
-    name: Build Docker Images
+  backend_test_b:
+    name: Backend Unit Test B
     runs-on: ubuntu-latest
+    needs: backend_build
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Build Docker image
+      - name: Run Backend Unit Test B
         run: |
-          docker build -t my-nextjs-docker:latest -f ./src/Dockerfile ./src  # 确保路径为 src 目录下的 Dockerfile
+          cd api
+          pip install -r requirements.txt
+          pytest
 
+  # Step 3: 部署到 Staging
+  deploy_staging:
+    name: Deploy Staging
+    runs-on: ubuntu-latest
+    needs: [frontend_test_a, frontend_test_b, backend_test_a, backend_test_b]
+    steps:
+      - name: Deploy to Staging
+        run: echo "Deploying to Staging at https://www.staging.interstellar.dev"
+        # 添加你的实际部署命令，例如使用 Terraform、kubectl、SSH 等
 
-
-
+  # Step 4: 部署到 Production
+  deploy_production:
+    name: Deploy Production
+    runs-on: ubuntu-latest
+    needs: deploy_staging
+    steps:
+      - name: Deploy to Production
+        run: echo "Deploying to Production"
+        # 添加你的实际生产环境部署命令
