@@ -56,7 +56,7 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 # 设置健康检查
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD wget -qO- "http://4.172.246.46/health" || exit 1
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD wget -qO- "http://4.172.246.46/api/healthchecker" || exit 1
 
 # 运行 Next.js 应用
 CMD ["node", "server.js"]
