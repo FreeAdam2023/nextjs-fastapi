@@ -107,16 +107,12 @@ jobs:
           echo "${{ secrets.COURSE_VM_PRIVATE_KEY }}" > course-vm_key.pem
           chmod 600 course-vm_key.pem
 
-      - name: Deploy to Azure VM
+      - name: Login and Deploy to Azure VM
         run: |
           ssh -i course-vm_key.pem -o StrictHostKeyChecking=no ${{ secrets.AZURE_VM_USER }}@${{ secrets.AZURE_VM_IP }} << 'EOF'
-          # Pull the latest Docker image from GitHub Container Registry
+          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker pull ghcr.io/wordiverse/my-nextjs-docker:latest
-
-          # Stop and remove existing container if running
           docker stop my-nextjs-container || true
           docker rm my-nextjs-container || true
-
-          # Run the new container
           docker run -d --name my-nextjs-container -p 80:3000 ghcr.io/wordiverse/my-nextjs-docker:latest
           EOF
