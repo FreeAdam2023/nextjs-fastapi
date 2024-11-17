@@ -8,3 +8,4 @@ exclude =
     .pytest_cache,
     migrations,  # 如果你有数据库迁移文件夹
     tests,  # 如果你不想检查测试文件
+max-line-length = 120
