@@ -15,7 +15,7 @@ def test_healthchecker():
     assert response.status_code == 200
     assert response.json() == {
         "status": "success",
-        "message": "Integrate FastAPI Framework with Next.js"
+        "message": "Integrate FastAPI Framework with Next.js",
     }
 
 

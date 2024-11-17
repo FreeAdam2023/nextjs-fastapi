@@ -36,10 +36,7 @@ todos: List[TodoItem] = []
 
 @app.get("/api/healthchecker")
 def healthchecker():
-    return {
-        "status": "success",
-        "message": "Integrate FastAPI Framework with Next.js"
-    }
+    return {"status": "success", "message": "Integrate FastAPI Framework with Next.js"}
 
 
 @app.post("/api/todos", response_model=TodoItem)
@@ -66,9 +63,7 @@ def get_todo_item(todo_id: int):
 def update_todo_item(todo_id: int, todo: TodoUpdate):
     for todo_item in todos:
         if todo_item.id == todo_id:
-            todo_item.title = (
-                todo.title if todo.title is not None else todo_item.title
-            )
+            todo_item.title = todo.title if todo.title is not None else todo_item.title
             if todo.completed is not None:
                 todo_item.completed = todo.completed
             else:

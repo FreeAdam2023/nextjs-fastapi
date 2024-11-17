@@ -1,0 +1,10 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    .venv,
+    .mypy_cache,
+    .pytest_cache,
+    migrations,  # 如果你有数据库迁移文件夹
+    tests,  # 如果你不想检查测试文件
